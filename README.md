@@ -101,10 +101,19 @@ const result = parse('<user><name>Alice</name></user>');
 - `keepComments: boolean` - Preserve XML comments (default: false)
 - `keepWhitespace: boolean` - Preserve whitespace text nodes (default: false)
 - `decodeEntities: boolean` - Decode XML entities in text and attributes (default: false)
+- `skipXmlDeclaration: boolean` - Ignore XML declarations like `<?xml version="1.0"?>` (default: false)
 - `simplify: boolean` - Auto-simplify output (default: false)
 - `selfClosingTags: string[]` - Tags that are self-closing (void elements) (default: ['img', 'br', 'input', 'meta', 'link', 'hr'])
 - `noChildNodes: string[]` - **Deprecated:** Use `selfClosingTags` instead
 - `filter: (node, index, depth, path) => boolean` - Filter nodes during parsing
+
+If you need to skip the XML declaration while parsing, pass `skipXmlDeclaration: true`:
+
+```javascript
+const dom = parse('<?xml version="1.0"?><root><child>value</child></root>', {
+  skipXmlDeclaration: true
+});
+```
 
 > **Note on Attributes:** Element attributes can have three types of values:
 > - **String value**: `<div id="test">` → `{id: "test"}`
