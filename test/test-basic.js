@@ -783,6 +783,36 @@ test('stringify encodeEntities option encodes text and attributes', () => {
 	);
 });
 
+test('stringify trims text nodes by default', () => {
+	const parsed = [{
+		tagName: 'root',
+		attributes: {},
+		children: ['  left  ', { tagName: 'b', attributes: {}, children: ['  in  '] }, '  right  ']
+	}];
+
+	assert.strictEqual(tXml.stringify(parsed), '<root>left<b>in</b>right</root>');
+});
+
+test('stringify keepWhitespaces preserves text node whitespace', () => {
+	const parsed = [{
+		tagName: 'root',
+		attributes: {},
+		children: ['  left  ', { tagName: 'b', attributes: {}, children: ['  in  '] }, '  right  ']
+	}];
+
+	assert.strictEqual(
+		tXml.stringify(parsed, { keepWhitespaces: true }),
+		'<root>  left  <b>  in  </b>  right  </root>'
+	);
+});
+
+test('parse keepWhitespace and stringify keepWhitespaces roundtrip text spacing', () => {
+	const xml = '<root>  left  <b>  in  </b>  right  </root>';
+	const parsed = tXml.parse(xml, { keepWhitespace: true });
+
+	assert.strictEqual(tXml.stringify(parsed, { keepWhitespaces: true }), xml);
+});
+
 test('parse decodeEntities and stringify encodeEntities roundtrip entities', () => {
 	const xml = '<root attr="x &amp; y">1 &lt; 2 &amp;&amp; 3 &gt; 2</root>';
 	const parsed = tXml.parse(xml, { decodeEntities: true });
