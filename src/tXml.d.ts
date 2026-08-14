@@ -38,6 +38,8 @@ export interface ParseOptions {
     keepWhitespace?: boolean;
     /** Decode XML entities in text and attribute values (e.g. `&amp;` -> `&`) */
     decodeEntities?: boolean;
+    /** Skip XML declaration/processing instructions such as <?xml version="1.0"?> */
+    skipXmlDeclaration?: boolean;
     /** Automatically simplify the output */
     simplify?: boolean;
     /** Parse a single node instead of a list of nodes */

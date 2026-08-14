@@ -292,6 +292,23 @@ test('stringify preserves processing instruction payload', () => {
 	assert.strictEqual(
 		tXml.stringify(tXml.parse('<?ACE 4?>')),
 		'<?ACE 4?>'
+    );
+});
+
+test('skipXmlDeclaration option ignores XML declaration', () => {
+	assert.deepStrictEqual(
+		tXml.parse('<?xml version="1.0" encoding="UTF-8"?><project><name>demo</name></project>', {
+			skipXmlDeclaration: true
+		}),
+		[{
+			tagName: 'project',
+			attributes: {},
+			children: [{
+				tagName: 'name',
+				attributes: {},
+				children: ['demo']
+			}]
+		}]
 	);
 });
 

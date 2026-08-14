@@ -74,6 +74,7 @@ export function parse(S, options) {
     var keepComments = !!options.keepComments;
     var keepWhitespace = !!options.keepWhitespace;
     var decodeEntitiesEnabled = !!options.decodeEntities;
+    var skipXmlDeclaration = !!options.skipXmlDeclaration;
 
     var openBracket = "<";
     var openBracketCC = "<".charCodeAt(0);
@@ -81,14 +82,18 @@ export function parse(S, options) {
     var closeBracketCC = ">".charCodeAt(0);
     var minusCC = "-".charCodeAt(0);
     var slashCC = "/".charCodeAt(0);
-    var exclamationCC = '!'.charCodeAt(0);
     var questionMarkCC = '?'.charCodeAt(0);
+    var exclamationCC = '!'.charCodeAt(0);
     var singleQuoteCC = "'".charCodeAt(0);
     var doubleQuoteCC = '"'.charCodeAt(0);
     var equalSignCC = '='.charCodeAt(0);
     var openCornerBracketCC = '['.charCodeAt(0);
     var closeCornerBracketCC = ']'.charCodeAt(0);
     var questionCC = '?'.charCodeAt(0);
+
+    function isXmlDeclarationTag(tagName) {
+        return typeof tagName === 'string' && tagName.toLowerCase() === '?xml';
+    }
 
 
     /**
@@ -164,6 +169,9 @@ export function parse(S, options) {
                     continue;
                 }
                 var node = parseNode();
+                if (skipXmlDeclaration && isXmlDeclarationTag(node.tagName)) {
+                    continue;
+                }
                 children.push(node);
             } else {
                 var text = parseText();
@@ -370,7 +378,10 @@ export function parse(S, options) {
             pos = 0;
         }
     } else if (options.parseNode) {
-        out = parseNode()
+        out = parseNode();
+        while (skipXmlDeclaration && typeof out === 'object' && out && isXmlDeclarationTag(out.tagName)) {
+            out = parseNode();
+        }
     } else {
         out = parseChildren('');
     }
