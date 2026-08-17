@@ -1,2 +1,2 @@
-export * from './transformStream.d.ts';
-export * from './tXml.d.ts';
+export * from './transformStream';
+export * from './tXml';

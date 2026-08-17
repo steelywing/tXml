@@ -1,5 +1,5 @@
 import { Transform } from 'node:stream';
-import { TNode, ParseOptions } from './tXml.d.ts';
+import type { TNode, ParseOptions } from './tXml';
 
 /**
  * Create a Node.js Transform stream that parses XML chunks

@@ -63,8 +63,8 @@ function encodeAttributeEntities(value) {
 /**
  * parseXML / html into a DOM Object. with no validation and some failure tolerance
  * @param {string} S your XML to parse
- * @param {import('./tXml.d.ts').ParseOptions} [options] all other options:
- * @return {(import('./tXml.d.ts').TNode | string)[] | any}
+ * @param {import('./tXml').ParseOptions} [options] all other options:
+ * @return {(import('./tXml').TNode | string)[] | any}
  */
 export function parse(S, options) {
     "txml";
@@ -99,7 +99,7 @@ export function parse(S, options) {
     /**
      * parsing a list of entries
      * @param {string} tagName
-     * @returns {(import('./tXml.d.ts').TNode | string)[]}
+     * @returns {(import('./tXml').TNode | string)[]}
      */
     function parseChildren(tagName) {
         var children = [];
@@ -219,7 +219,7 @@ export function parse(S, options) {
     /**
      *    is parsing a node, including tagName, Attributes and its children,
      * to parse children it uses the parseChildren again, that makes the parsing recursive
-     * @returns {import('./tXml.d.ts').TNode}
+     * @returns {import('./tXml').TNode}
      */
     var SelfClosingTags = options.selfClosingTags || options.noChildNodes || ['img', 'br', 'input', 'meta', 'link', 'hr'];
 
@@ -230,7 +230,7 @@ export function parse(S, options) {
         const instructionContentStart = pos;
         /** @type {Record<string, string | null>} */
         const attributes = {};
-        /** @type {(import('./tXml.d.ts').TNode | string)[]} */
+        /** @type {(import('./tXml').TNode | string)[]} */
         let children = [];
 
         // parsing attributes
@@ -362,7 +362,7 @@ export function parse(S, options) {
         }
     }
 
-    /** @type {(import('./tXml.d.ts').TNode | string)[] | import('./tXml.d.ts').TNode} */
+    /** @type {(import('./tXml').TNode | string)[] | import('./tXml').TNode} */
     var out;
     
     if (options.attrValue !== undefined) {
@@ -411,7 +411,7 @@ export function parse(S, options) {
  * be aware, that it is not possible to reproduce the original xml from a simplified version, because the order of elements is not saved.
  * therefore your program will be more flexible and easier to read.
  *
- * @param {(import('./tXml.d.ts').TNode | string)[]} children the childrenList
+ * @param {(import('./tXml').TNode | string)[]} children the childrenList
  * @returns {Record<string, any> | string}
  */
 export function simplify(children) {
@@ -461,7 +461,7 @@ export function simplify(children) {
 /**
  * similar to simplify, but lost less
  *
- * @param {(import('./tXml.d.ts').TNode | string)[]} children the childrenList
+ * @param {(import('./tXml').TNode | string)[]} children the childrenList
  * @param {Record<string, string | null>} [parentAttributes]
  * @returns {Record<string, any> | string | {_attributes: Record<string, string | null>, value: string}}
  */
@@ -499,14 +499,14 @@ export function simplifyLostLess(children, parentAttributes = {}) {
 
 /**
  * behaves the same way as Array.filter, if the filter method return true, the element is in the resultList
- * @param {(import('./tXml.d.ts').TNode | string)[]} children the children of a node
- * @param {(node: import('./tXml.d.ts').TNode, index: number, depth: number, path: string) => boolean} f the filter method
+ * @param {(import('./tXml').TNode | string)[]} children the children of a node
+ * @param {(node: import('./tXml').TNode, index: number, depth: number, path: string) => boolean} f the filter method
  * @param {number} [dept]
  * @param {string} [path]
- * @returns {import('./tXml.d.ts').TNode[]}
+ * @returns {import('./tXml').TNode[]}
  */
 export function filter(children, f, dept = 0, path = '') {
-    /** @type {import('./tXml.d.ts').TNode[]} */
+    /** @type {import('./tXml').TNode[]} */
     var out = [];
     
     children.forEach(function(child, i) {
@@ -526,8 +526,8 @@ export function filter(children, f, dept = 0, path = '') {
  * this is useful,
  *  1. to remove whitespace
  * 2. to recreate xml data, with some changed data.
- * @param {import('./tXml.d.ts').TNode | (import('./tXml.d.ts').TNode | string)[]} O the object to Stringify
- * @param {import('./tXml.d.ts').StringifyOptions} [options] stringify options
+ * @param {import('./tXml').TNode | (import('./tXml').TNode | string)[]} O the object to Stringify
+ * @param {import('./tXml').StringifyOptions} [options] stringify options
  */
 export function stringify(O, options) {
     if (!O) return '';
@@ -539,7 +539,7 @@ export function stringify(O, options) {
     var out = '';
 
     /**
-     * @param {(import('./tXml.d.ts').TNode | string)[]} nodes
+     * @param {(import('./tXml').TNode | string)[]} nodes
      */
     function writeChildren(nodes) {
         if (nodes) {
@@ -556,7 +556,7 @@ export function stringify(O, options) {
     }
 
     /**
-     * @param {import('./tXml.d.ts').TNode} N
+     * @param {import('./tXml').TNode} N
      */
     function writeNode(N) {
         if (!N) return;
@@ -599,7 +599,7 @@ export function stringify(O, options) {
  * use this method to read the text content, of some node.
  * It is great if you have mixed content like:
  * this text has some <b>big</b> text and a <a href=''>link</a>
- * @param {import('./tXml.d.ts').TNode | (import('./tXml.d.ts').TNode | string)[] | string} tDom
+ * @param {import('./tXml').TNode | (import('./tXml').TNode | string)[] | string} tDom
  * @return {string}
  */
 export function toContentString(tDom) {
@@ -621,7 +621,7 @@ export function toContentString(tDom) {
  * @param {string} S
  * @param {string} id
  * @param {boolean} [simplified]
- * @returns {import('./tXml.d.ts').TNode | Record<string, any> | string | undefined}
+ * @returns {import('./tXml').TNode | Record<string, any> | string | undefined}
  */
 export function getElementById(S, id, simplified) {
     var out = parse(S, {
@@ -634,7 +634,7 @@ export function getElementById(S, id, simplified) {
  * @param {string} S
  * @param {string} classname
  * @param {boolean} [simplified]
- * @returns {(import('./tXml.d.ts').TNode | string)[] | Record<string, any> | string}
+ * @returns {(import('./tXml').TNode | string)[] | Record<string, any> | string}
  */
 export function getElementsByClassName(S, classname, simplified) {
     const out = parse(S, {
@@ -648,7 +648,7 @@ export function getElementsByClassName(S, classname, simplified) {
  * Type guard to check if a node is a text node (string).
  * Useful for filtering and type narrowing when working with mixed node arrays.
  * 
- * @param {import('./tXml.d.ts').TNode | string} node - The node to check
+ * @param {import('./tXml').TNode | string} node - The node to check
  * @returns {node is string} True if the node is a string (text node)
  * @example
  * const parsed = parse('<div>Hello <span>World</span></div>');
@@ -666,8 +666,8 @@ export function isTextNode(node) {
  * Type guard to check if a node is an element node (TNode object).
  * Useful for filtering and type narrowing when working with mixed node arrays.
  * 
- * @param {import('./tXml.d.ts').TNode | string} node - The node to check
- * @returns {node is import('./tXml.d.ts').TNode} True if the node is a TNode (element node)
+ * @param {import('./tXml').TNode | string} node - The node to check
+ * @returns {node is import('./tXml').TNode} True if the node is a TNode (element node)
  * @example
  * const parsed = parse('<div>Hello <span>World</span></div>');
  * parsed[0].children.forEach(child => {

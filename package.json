@@ -1,6 +1,6 @@
 {
     "name": "txml",
-    "version": "6.0.1",
+    "version": "6.0.2",
     "description": "fastest XML DOM Parser for node/browser/worker",
     "type": "module",
     "main": "dist/index.cjs",
