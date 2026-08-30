@@ -1090,6 +1090,59 @@ test('filter with depth parameter', () => {
 	assert(maxDepth >= 3, `should have depth of at least 3, got ${maxDepth}`);
 });
 
+test('filter callback receives stable index depth and path values', () => {
+	const xml = '<root><a/><group><b/><c/></group><d/></root>';
+	const parsed = tXml.parse(xml);
+	const seen = [];
+
+	tXml.filter(parsed, (node, index, depth, path) => {
+		seen.push({ tagName: node.tagName, index, depth, path });
+		return false;
+	});
+
+	assert.deepStrictEqual(seen, [
+		{ tagName: 'root', index: 0, depth: 0, path: '' },
+		{ tagName: 'a', index: 0, depth: 1, path: '0.root' },
+		{ tagName: 'group', index: 1, depth: 1, path: '0.root' },
+		{ tagName: 'b', index: 0, depth: 2, path: '0.root.1.group' },
+		{ tagName: 'c', index: 1, depth: 2, path: '0.root.1.group' },
+		{ tagName: 'd', index: 2, depth: 1, path: '0.root' }
+	]);
+});
+
+test('filter keeps preorder and original node identity', () => {
+	const xml = '<root><item id="1"/><group><item id="2"/></group><item id="3"/></root>';
+	const parsed = tXml.parse(xml);
+	const root = parsed[0];
+	const firstItem = root.children[0];
+	const group = root.children[1];
+	const secondItem = group.children[0];
+	const thirdItem = root.children[2];
+
+	const items = tXml.filter(parsed, (node) => node.tagName === 'item');
+
+	assert.strictEqual(items.length, 3);
+	assert.strictEqual(items[0], firstItem);
+	assert.strictEqual(items[1], secondItem);
+	assert.strictEqual(items[2], thirdItem);
+});
+
+test('filter respects explicit starting depth and path', () => {
+	const xml = '<root><child/></root>';
+	const parsed = tXml.parse(xml);
+	const seen = [];
+
+	tXml.filter(parsed, (node, index, depth, path) => {
+		seen.push({ tagName: node.tagName, index, depth, path });
+		return false;
+	}, 5, 'seed.path');
+
+	assert.deepStrictEqual(seen, [
+		{ tagName: 'root', index: 0, depth: 5, path: 'seed.path' },
+		{ tagName: 'child', index: 0, depth: 6, path: 'seed.path.0.root' }
+	]);
+});
+
 test('simplify with arrays of similar elements', () => {
 	const xml = '<list><item>First</item><item>Second</item><item>Third</item></list>';
 	const parsed = tXml.parse(xml);

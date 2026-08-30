@@ -521,16 +521,27 @@ export function simplifyLostLess(children, parentAttributes = {}) {
 export function filter(children, f, dept = 0, path = '') {
     /** @type {import('./tXml').TNode[]} */
     var out = [];
-    
-    children.forEach(function(child, i) {
-        if (typeof(child) === 'object' && f(child, i, dept, path)) {
-            out.push(child);
-        }
-        if (typeof child === 'object' && child.children) {
-            var kids = filter(child.children, f, dept + 1, (path ? path + '.' : '') + i + '.' + child.tagName);
-            out = out.concat(kids);
-        }
-    });
+
+    /**
+     * @param {(import('./tXml').TNode | string)[]} nodes
+     * @param {number} depth
+     * @param {string} currentPath
+     */
+    function walk(nodes, depth, currentPath) {
+        nodes.forEach(function(child, i) {
+            if (typeof child !== 'object') return;
+
+            if (f(child, i, depth, currentPath)) {
+                out.push(child);
+            }
+
+            if (child.children) {
+                walk(child.children, depth + 1, (currentPath ? currentPath + '.' : '') + i + '.' + child.tagName);
+            }
+        });
+    }
+
+    walk(children, dept, path);
     return out;
 }
 
