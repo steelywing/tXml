@@ -59,6 +59,8 @@ export interface StringifyOptions {
     /** Encode XML entities in text and attribute values (e.g. `&` -> `&amp;`) */
     encodeEntities?: boolean;
     keepWhitespaces?: boolean;
+    /** Serialize empty elements as self-closing tags (e.g. `<item/>`). Default: true */
+    selfCloseEmpty?: boolean;
 }
 
 /**

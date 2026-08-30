@@ -184,7 +184,12 @@ test('getElementsByClassName', () => {
 
 test('attribute without value', () => {
 	const s = '<test><something flag></something></test>';
-	assert.deepStrictEqual(tXml.stringify(tXml.parse(s)), s);
+	assert.deepStrictEqual(tXml.stringify(tXml.parse(s)), '<test><something flag/></test>');
+});
+
+test('stringify can keep explicit closing tags for empty nodes', () => {
+	const s = '<test><something flag></something></test>';
+	assert.deepStrictEqual(tXml.stringify(tXml.parse(s), { selfCloseEmpty: false }), s);
 });
 
 test('unquoted attribute value', () => {
@@ -764,7 +769,7 @@ test('stringify with duplicate attributes preserves last value', () => {
 	}];
 	
 	const result = tXml.stringify(parsed);
-	assert.strictEqual(result, '<test id="final-value"></test>');
+	assert.strictEqual(result, '<test id="final-value"/>');
 });
 
 test('stringify encodeEntities option encodes text and attributes', () => {

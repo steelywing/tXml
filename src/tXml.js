@@ -535,6 +535,7 @@ export function stringify(O, options) {
     options = options || {};
     var encodeEntitiesEnabled = !!options.encodeEntities;
     var keepWhitespace = !!options.keepWhitespaces;
+    var selfCloseEmpty = options.selfCloseEmpty !== false;
     
     var out = '';
 
@@ -556,7 +557,31 @@ export function stringify(O, options) {
     }
 
     /**
-     * @param {import('./tXml').TNode} N
+     * @param {(import('./tXml').TNode | string)[] | undefined} nodes
+     * @returns {boolean}
+     */
+    function hasSerializableChildren(nodes) {
+        if (!nodes || nodes.length === 0) {
+            return false;
+        }
+
+        for (var i = 0; i < nodes.length; i++) {
+            var child = nodes[i];
+            if (typeof child === 'string') {
+                var textNode = keepWhitespace ? child : child.trim();
+                if (textNode.length > 0) {
+                    return true;
+                }
+            } else if (child) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+    * @param {import('./tXml').TNode} N
      */
     function writeNode(N) {
         if (!N) return;
@@ -585,6 +610,12 @@ export function stringify(O, options) {
             out += '?>';
             return;
         }
+
+        if (selfCloseEmpty && !hasSerializableChildren(N.children)) {
+            out += '/>';
+            return;
+        }
+
         out += '>';
         writeChildren(N.children);
         out += '</' + N.tagName + '>';
