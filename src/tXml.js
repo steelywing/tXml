@@ -287,6 +287,8 @@ export function parse(S, options) {
             pos++;
         }
 
+        const isExplicitSelfClosed = !isProcessingInstruction && S.charCodeAt(pos - 1) === slashCC;
+
         if (isProcessingInstruction) {
             var instructionContent = S.slice(instructionContentStart, pos).trim();
 
@@ -328,11 +330,22 @@ export function parse(S, options) {
         } else {
             pos++;
         }
-        return {
+        const node = {
             tagName,
             attributes,
             children,
         };
+
+        if (isExplicitSelfClosed) {
+            Object.defineProperty(node, 'selfClosed', {
+                value: true,
+                enumerable: false,
+                writable: true,
+                configurable: true,
+            });
+        }
+
+        return node;
     }
 
     /**
@@ -608,6 +621,11 @@ export function stringify(O, options) {
                 }
             }
             out += '?>';
+            return;
+        }
+
+        if (N.selfClosed === true) {
+            out += '/>';
             return;
         }
 

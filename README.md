@@ -156,7 +156,7 @@ const xml = stringify(nodes);
 
 **Options:**
 - `encodeEntities: boolean` - Encode XML entities in text and attributes during output (default: false)
-- `selfCloseEmpty: boolean` - Serialize empty elements as self-closing tags like `<item/>` (default: true)
+- `selfCloseEmpty: boolean` - Serialize empty elements as self-closing tags like `<item/>` (default: true). If a parsed node has `selfClosed: true`, stringify keeps it self-closing even when this option is `false`.
 
 ```javascript
 import { parse, stringify } from 'txml';

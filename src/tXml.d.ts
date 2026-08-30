@@ -11,6 +11,8 @@ export interface TNode {
      */
     attributes: Record<string, string | null>;
     children: (TNode | string)[];
+    /** True when this node was parsed from an explicit self-closing tag like `<item/>` */
+    selfClosed?: boolean;
 }
 
 /**
@@ -59,7 +61,7 @@ export interface StringifyOptions {
     /** Encode XML entities in text and attribute values (e.g. `&` -> `&amp;`) */
     encodeEntities?: boolean;
     keepWhitespaces?: boolean;
-    /** Serialize empty elements as self-closing tags (e.g. `<item/>`). Default: true */
+    /** Serialize empty elements as self-closing tags (e.g. `<item/>`). Default: true. Nodes with `selfClosed: true` are always serialized as self-closing. */
     selfCloseEmpty?: boolean;
 }
 

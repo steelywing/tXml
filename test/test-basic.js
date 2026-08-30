@@ -192,6 +192,28 @@ test('stringify can keep explicit closing tags for empty nodes', () => {
 	assert.deepStrictEqual(tXml.stringify(tXml.parse(s), { selfCloseEmpty: false }), s);
 });
 
+test('stringify preserves parsed self-closing tags when selfCloseEmpty is false', () => {
+	const s = '<test><explicit></explicit><selfclosed/></test>';
+	assert.deepStrictEqual(
+		tXml.stringify(tXml.parse(s), { selfCloseEmpty: false }),
+		'<test><explicit></explicit><selfclosed/></test>'
+	);
+});
+
+test('roundtrip preserves mixed empty tag styles when selfCloseEmpty is false', () => {
+	const s = '<svg><path d="M0 0"/><g></g><circle/></svg>';
+	assert.strictEqual(tXml.stringify(tXml.parse(s), { selfCloseEmpty: false }), s);
+});
+
+test('selfClosed parse flag is non-enumerable for compatibility', () => {
+	const [root] = tXml.parse('<root><selfclosed/></root>');
+	const child = root.children[0];
+
+	assert.strictEqual(typeof child, 'object');
+	assert.strictEqual(child.selfClosed, true);
+	assert.strictEqual(Object.keys(child).includes('selfClosed'), false);
+});
+
 test('unquoted attribute value', () => {
 	const s = '<p type=bold>hello mom</p>';
 	assert.deepStrictEqual(
@@ -653,6 +675,10 @@ test('parsing empty and self-closing tags', () => {
 	
 	assert.strictEqual(result[0].tagName, 'root');
 	assert.strictEqual(result[0].children.length, 4);
+	assert.strictEqual(result[0].children[0].selfClosed, undefined);
+	assert.strictEqual(result[0].children[1].selfClosed, true);
+	assert.strictEqual(result[0].children[2].selfClosed, true);
+	assert.strictEqual(result[0].children[3].selfClosed, true);
 	
 	result[0].children.forEach(child => {
 		if (typeof child === 'object') {
