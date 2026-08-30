@@ -72,7 +72,7 @@ export function parse(S, options) {
 
     var pos = options.pos || 0;
     var keepComments = !!options.keepComments;
-    var keepWhitespace = !!options.keepWhitespace;
+    var keepWhitespace = options.keepWhitespace !== undefined ? !!options.keepWhitespace : !!options.keepWhitespaces;
     var decodeEntitiesEnabled = !!options.decodeEntities;
     var skipXmlDeclaration = !!options.skipXmlDeclaration;
 
@@ -547,7 +547,7 @@ export function stringify(O, options) {
 
     options = options || {};
     var encodeEntitiesEnabled = !!options.encodeEntities;
-    var keepWhitespace = !!options.keepWhitespaces;
+    var keepWhitespace = options.keepWhitespace !== undefined ? !!options.keepWhitespace : !!options.keepWhitespaces;
     var selfCloseEmpty = options.selfCloseEmpty !== false;
     
     var out = '';

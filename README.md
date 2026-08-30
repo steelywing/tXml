@@ -100,6 +100,7 @@ const result = parse('<user><name>Alice</name></user>');
 **Options:**
 - `keepComments: boolean` - Preserve XML comments (default: false)
 - `keepWhitespace: boolean` - Preserve whitespace text nodes (default: false)
+- `keepWhitespaces: boolean` - **Deprecated alias:** use `keepWhitespace` instead
 - `decodeEntities: boolean` - Decode XML entities in text and attributes (default: false)
 - `skipXmlDeclaration: boolean` - Ignore XML declarations like `<?xml version="1.0"?>` (default: false)
 - `simplify: boolean` - Auto-simplify output (default: false)
@@ -156,6 +157,8 @@ const xml = stringify(nodes);
 
 **Options:**
 - `encodeEntities: boolean` - Encode XML entities in text and attributes during output (default: false)
+- `keepWhitespace: boolean` - Preserve whitespace text nodes during serialization (default: false)
+- `keepWhitespaces: boolean` - **Deprecated alias:** use `keepWhitespace` instead
 - `selfCloseEmpty: boolean` - Serialize empty elements as self-closing tags like `<item/>` (default: true). If a parsed node has `selfClosed: true`, stringify keeps it self-closing even when this option is `false`.
 
 ```javascript

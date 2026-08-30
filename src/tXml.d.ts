@@ -38,6 +38,10 @@ export interface ParseOptions {
     keepComments?: boolean;
     /** Keep whitespace text nodes */
     keepWhitespace?: boolean;
+    /**
+     * @deprecated Use keepWhitespace instead
+     */
+    keepWhitespaces?: boolean;
     /** Decode XML entities in text and attribute values (e.g. `&amp;` -> `&`) */
     decodeEntities?: boolean;
     /** Skip XML declaration/processing instructions such as <?xml version="1.0"?> */
@@ -60,6 +64,11 @@ export interface ParseOptions {
 export interface StringifyOptions {
     /** Encode XML entities in text and attribute values (e.g. `&` -> `&amp;`) */
     encodeEntities?: boolean;
+    /** Preserve whitespace text nodes during serialization */
+    keepWhitespace?: boolean;
+    /**
+     * @deprecated Use keepWhitespace instead
+     */
     keepWhitespaces?: boolean;
     /** Serialize empty elements as self-closing tags (e.g. `<item/>`). Default: true. Nodes with `selfClosed: true` are always serialized as self-closing. */
     selfCloseEmpty?: boolean;

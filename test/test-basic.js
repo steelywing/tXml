@@ -824,6 +824,19 @@ test('stringify trims text nodes by default', () => {
 	assert.strictEqual(tXml.stringify(parsed), '<root>left<b>in</b>right</root>');
 });
 
+test('stringify keepWhitespace preserves text node whitespace', () => {
+	const parsed = [{
+		tagName: 'root',
+		attributes: {},
+		children: ['  left  ', { tagName: 'b', attributes: {}, children: ['  in  '] }, '  right  ']
+	}];
+
+	assert.strictEqual(
+		tXml.stringify(parsed, { keepWhitespace: true }),
+		'<root>  left  <b>  in  </b>  right  </root>'
+	);
+});
+
 test('stringify keepWhitespaces preserves text node whitespace', () => {
 	const parsed = [{
 		tagName: 'root',
