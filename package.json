@@ -8,7 +8,7 @@
     "scripts": {
         "build": "rollup -c",
         "typecheck": "tsc --noEmit -p tsconfig.json",
-        "test": "tsx --test test/basic.test.ts test/stream.test.ts",
+        "test": "tsx --test test/*.test.ts",
         "prepublishOnly": "npm run build && npm test"
     },
     "files": [
