@@ -7,6 +7,7 @@ const config = {
 };
 
 export default [
+  // Main bundle (all exports)
   {
     input: 'src/index.ts',
     output: [
@@ -29,6 +30,7 @@ export default [
       }),
     ],
   },
+  // Parser only (tree-shakeable, no Node.js dependencies)
   {
     input: 'src/tXml.ts',
     output: [
@@ -43,6 +45,7 @@ export default [
         format: 'esm',
         entryFileNames: '[name].mjs',
       },
+      // Browser UMD bundle (minified)
       {
         file: 'dist/txml.min.js',
         format: 'umd',
@@ -56,6 +59,7 @@ export default [
       terser(),
     ],
   },
+  // Transform stream
   {
     input: 'src/transformStream.ts',
     output: [
